@@ -1,9 +1,26 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
-class User(models.Model):
-    email = models.EmailField(max_length=200, unique=True)
-    password = models.CharField(max_length=20)
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None):
+        if not email:
+            raise ValueError()
+        
+        user = self.model(
+            email=email,
+        )
+        user.set_password(password)
+        user.save(using=self._db)
 
-    created_at = models.DateTimeField(auto_now_add=True)
+        return user
+
+class User(AbstractBaseUser):
+    email = models.EmailField(max_length=30, unique=True, null=False, blank=False)
+
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'
