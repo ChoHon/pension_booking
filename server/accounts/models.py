@@ -15,7 +15,7 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser):
-    email = models.EmailField(max_length=30, unique=True, null=False, blank=False)
+    email = models.EmailField(max_length=30, unique=True)
 
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -23,3 +23,6 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
+    class Meta:
+        db_table = 'user'

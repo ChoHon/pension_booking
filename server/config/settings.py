@@ -24,6 +24,7 @@ INSTALLED_APPS = [
 
     'accounts',
     'pensions',
+    'rooms',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
