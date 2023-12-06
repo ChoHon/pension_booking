@@ -1,15 +1,15 @@
 from django.db import models
+from util.base_models import BaseModel
 
-class Reservation(models.Model):
+
+class Reservation(BaseModel):
     room = models.ForeignKey('rooms.room', on_delete=models.CASCADE)
     option_bbq = models.BooleanField()
-    option_is_over_capacity = models.BooleanField()
+    option_over_capacity = models.BooleanField()
     discount = models.IntegerField()
-    end_price = models.IntegerField()
+    final_payment = models.IntegerField()
 
-    description = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    is_canceled = models.BooleanField(default=False)
 
     # def save(self, *arg, **kwargs):
     #     self.end_price = 
