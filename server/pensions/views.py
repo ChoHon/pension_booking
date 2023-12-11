@@ -13,9 +13,7 @@ class PensionViewSet(viewsets.ModelViewSet):
     
     def list(self, request, *args, **kwargs):
         self.queryset = self.queryset.filter(user=request.user)
-
-        serializer = self.get_serializer(self.queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return super().list(request, *args, **kwargs)
     
     def retrieve(self, request, *args, **kwargs):
         instance = self.queryset.get(id=kwargs["pk"], user=request.user)
