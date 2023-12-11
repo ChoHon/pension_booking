@@ -11,8 +11,5 @@ class Reservation(BaseModel):
 
     is_canceled = models.BooleanField(default=False)
 
-    # def save(self, *arg, **kwargs):
-    #     self.end_price = 
-
     class Meta:
         db_table = 'reservation'
