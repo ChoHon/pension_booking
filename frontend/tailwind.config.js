@@ -4,12 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        "weather-primary" : "#00668A",
-        "weather-secondary" : "#004E71",
+        "pension-primary": "#00668A",
+        "pension-secondary": "#004E71",
       },
     },
     fontFamily: {
-      Roboto: ["Roboto, sans-serif"],
+      sans: ["Nanum Gothic, sans-serif"],
     },
     container: {
       padding: "2rem",
@@ -21,5 +21,4 @@ export default {
     },
   },
   plugins: [],
-}
-
+};
