@@ -53,17 +53,3 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_200_OK)
         except:
             return Response(data={"detail" : "잘못된 토큰"}, status=status.HTTP_401_UNAUTHORIZED)
-        
-# Refresh 토큰으로 Access 토큰 재발급 View
-class CustomTokenRefreshView(TokenRefreshView):
-    permission_classes = [AllowAny]
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-
-        try:
-            serializer.is_valid(raise_exception=True)        
-        except:
-            raise ValidationError({"detail" : "잘못된 토큰"})
-        
-        return Response(data=serializer.validated_data, status=status.HTTP_200_OK)

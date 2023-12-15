@@ -11,7 +11,7 @@
           <h1
             class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl"
           >
-            로그인
+            회원가입
           </h1>
 
           <form class="space-y-4 md:space-y-6" action="#">
@@ -20,10 +20,11 @@
               <label
                 for="email"
                 class="block mb-2 text-md font-medium text-gray-900"
-                >이메일</label
               >
+                이메일
+              </label>
               <input
-                v-model="user.email"
+                v-model="new_user.email"
                 type="email"
                 name="email"
                 id="email"
@@ -38,10 +39,11 @@
               <label
                 for="password"
                 class="block mb-2 text-md font-medium text-gray-900"
-                >비밀번호</label
               >
+                비밀번호
+              </label>
               <input
-                v-model="user.password"
+                v-model="new_user.password"
                 type="password"
                 name="password"
                 id="password"
@@ -51,23 +53,46 @@
               />
             </div>
 
-            <!-- 로그인 버튼 -->
+            <!-- 비밀번호 확인 -->
+            <div>
+              <label
+                for="confirm-password"
+                class="block mb-2 text-md font-medium text-gray-900"
+                >비밀번호 확인</label
+              >
+              <input
+                v-model="new_user.confirm_password"
+                type="password"
+                name="confirm-password"
+                id="confirm-password"
+                placeholder="••••••••"
+                :class="{
+                  'bg-red-100':
+                    new_user.password !== new_user.confirm_password &&
+                    new_user.confirm_password.length > 0,
+                }"
+                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                required
+              />
+            </div>
+
+            <!-- 회원가입 버튼 -->
             <button
               type="submit"
               class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-md px-5 py-2.5 text-center"
-              @click.prevent="login"
+              @click.prevent="signup"
             >
-              로그인
+              회원가입
             </button>
 
-            <!-- 회원가입 -->
+            <!-- 로그인 화면 이동 -->
             <p class="text-sm font-light text-gray-500">
-              아직 회원이 아니신가요?
-              <RouterLink :to="{ name: 'signup' }">
+              이미 회원이신가요?
+              <RouterLink :to="{ name: 'login' }">
                 <span
                   class="font-medium text-primary-600 hover:underline cursor-pointer"
                 >
-                  회원가입
+                  로그인
                 </span>
               </RouterLink>
             </p>
@@ -79,29 +104,25 @@
 </template>
 
 <script setup lang="ts">
-import http from '@/services/http';
-import { reactive, resolveDirective } from 'vue';
-import { useAuthStore } from '@/stores/auth';
-import router from '@/router';
+import { reactive } from 'vue';
+import http from '@/services/http.js';
 
-const authStore = useAuthStore();
-
-const user = reactive({
+const new_user = reactive({
   email: '',
   password: '',
+  confirm_password: '',
 });
 
-const login = async () => {
-  try {
-    const response = await http.post('/accounts/login/', user);
-    const { access, refresh } = response.data;
-    authStore.setTokens(access, refresh);
-
-    router.push({ name: 'home' });
-    return response;
-  } catch (error) {
-    alert(error.response.data.detail);
-  }
+const signup = () => {
+  const response = http
+    .post('/accounts/signup/', new_user)
+    .then(res => {
+      console.log(res.data);
+    })
+    .catch(err => {
+      console.log(err.response.data);
+    });
+  return response;
 };
 </script>
 

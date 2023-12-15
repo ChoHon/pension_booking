@@ -1,176 +1,121 @@
 <template>
-  <nav class="bg-gray-900 shadow-lg text-white">
-    <div
-      class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
-    >
-      <!-- 로고 -->
-      <RouterLink
-        :to="{
-          name: 'home',
-        }"
+  <header>
+    <nav class="border-gray-200 px-4 lg:px-6 py-2.5 bg-gray-800 shadow-lg">
+      <div
+        class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl text-white"
       >
-        <div
-          class="flex items-center space-x-3 rtl:space-x-reverse text-2xl cursor-pointer"
-        >
-          <i class="fa-solid fa-hotel" />
-          <span class="self-center font-semibold whitespace-nowrap">
-            펜션 관리
+        <!-- 로고 -->
+        <RouterLink :to="{ name: 'home' }">
+          <div class="flex items-center">
+            <i class="fa-solid fa-hotel px-2 text-xl"></i>
+            <span class="self-center text-xl font-semibold whitespace-nowrap">
+              펜션 관리
+            </span>
+          </div>
+        </RouterLink>
+
+        <div>
+          <RouterLink :to="{ name: 'home' }">
+            <span class="text-lg px-2 cursor-pointer hover:text-primary-400">
+              홈
+            </span>
+          </RouterLink>
+
+          <span class="text-lg px-2 cursor-pointer hover:text-primary-400">
+            펜션
           </span>
         </div>
-      </RouterLink>
 
-      <!-- 버튼 -->
-      <div
-        class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse text-sm"
-      >
-        <!-- 로그인 -->
-        <button
-          type="button"
-          class="focus:ring-4 focus:outline-none font-medium rounded-lg px-4 py-2 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
-        >
-          시작하기
-        </button>
-
-        <!-- 접힌 메뉴 -->
-        <button
-          data-collapse-toggle="navbar-cta"
-          type="button"
-          class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm rounded-lg md:hidden focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
-          aria-controls="navbar-cta"
-          aria-expanded="false"
-        >
-          <span class="sr-only">메뉴 열기</span>
-          <i class="fa-solid fa-bars text-2xl"></i>
-        </button>
-      </div>
-
-      <!-- 메뉴 -->
-      <div
-        class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
-        id="navbar-cta"
-      >
-        <ul
-          class="flex flex-col font-medium p-4 md:p-0 mt-4 border rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 bg-gray-800 md:bg-gray-900 border-gray-700"
-        >
-          <!-- 홈 -->
-          <li>
+        <div class="flex items-center lg:order-2">
+          <!-- 로그인 -->
+          <RouterLink :to="{ name: 'login' }">
             <div
-              class="block py-2 px-3 md:p-0 rounded md:hover:text-blue-500 text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700 cursor-pointer"
+              class="text-white focus:ring-4 font-medium rounded-lg text-md px-4 lg:px-5 py-2 lg:py-2.5 mr-2 hover:bg-gray-700 focus:outline-none focus:ring-gray-800 cursor-pointer"
             >
-              홈
+              로그인
             </div>
-          </li>
+          </RouterLink>
 
-          <!-- 예시 -->
-          <li>
-            <a
-              href="#"
-              class="block py-2 px-3 md:p-0 rounded md:hover:text-blue-500 text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700 cursor-pointer"
-              >예시</a
+          <!-- 회원가입 -->
+          <RouterLink :to="{ name: 'signup' }">
+            <div
+              class="text-white focus:ring-4 font-medium rounded-lg text-md px-4 lg:px-5 py-2 lg:py-2.5 mr-2 bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-primary-800"
             >
-          </li>
-        </ul>
-      </div>
-    </div>
+              시작하기
+            </div>
+          </RouterLink>
 
-    <BaseModal>
-      <div class="relative p-4 w-full max-w-md max-h-full">
-        <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow">
-          <!-- Modal header -->
-          <div
-            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t"
+          <!-- 모바일 메뉴 버튼 -->
+          <!-- <button
+            data-collapse-toggle="mobile-menu-2"
+            type="button"
+            class="inline-flex items-center p-2 ml-1 text-sm rounded-lg lg:hidden focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
+            aria-controls="mobile-menu-2"
+            aria-expanded="false"
           >
-            <h3 class="text-xl font-semibold text-gray-900">로그인</h3>
-
-            <button
-              type="button"
-              class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
-            >
-              <i class="fa-solid fa-xmark text-2xl"></i>
-              <span class="sr-only">닫기</span>
-            </button>
-          </div>
-
-          <!-- Modal body -->
-          <div class="p-4 md:p-5">
-            <form class="space-y-4">
-              <!-- 이메일 -->
-              <div>
-                <label
-                  for="email"
-                  class="block mb-2 text-md font-medium text-gray-900"
-                >
-                  이메일
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  v-model="user.email"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  placeholder="name@company.com"
-                  required
-                />
-              </div>
-
-              <!-- 비밀번호 -->
-              <div>
-                <label
-                  for="password"
-                  class="block mb-2 text-md font-medium text-gray-900"
-                >
-                  비밀번호
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  v-model="user.password"
-                  placeholder="••••••••"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  required
-                />
-              </div>
-
-              <!-- 로그인 버튼 -->
-              <button
-                type="submit"
-                class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-bold rounded-lg text-md px-5 py-2.5 text-center"
-                @click.prevent="login"
-              >
-                로그인
-              </button>
-
-              <!-- 회원가입 -->
-              <div class="text-sm font-medium text-gray-500">
-                회원이 아니신가요?
-                <span class="text-blue-700 hover:underline">회원가입</span>
-              </div>
-            </form>
-          </div>
+            <span class="sr-only">모바일 메뉴</span>
+            <i class="fa-solid fa-bars text-xl w-6 h-6"></i>
+          </button> -->
         </div>
+
+        <!-- 모바일 메뉴 -->
+        <!-- <div
+          class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
+          id="mobile-menu-2"
+        >
+          <ul
+            class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0"
+          >
+            <li>
+              <a
+                href="#"
+                class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white"
+                aria-current="page"
+                >Home</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                >Company</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                >Marketplace</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                >Features</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                >Team</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                >Contact</a
+              >
+            </li>
+          </ul>
+        </div> -->
       </div>
-    </BaseModal>
-  </nav>
+    </nav>
+  </header>
 </template>
 
 <script setup>
-import axios from 'axios';
-import { reactive } from 'vue';
 import { RouterLink } from 'vue-router';
-import BaseModal from './BaseModal.vue';
-
-const user = reactive({
-  email: '',
-  password: '',
-});
-
-const login = async () => {
-  const response = await axios.post(
-    'http://localhost:8000/accounts/login/',
-    user
-  );
-  console.log(response.data);
-};
 </script>
