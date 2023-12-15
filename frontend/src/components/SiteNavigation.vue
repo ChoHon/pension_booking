@@ -21,9 +21,11 @@
             </span>
           </RouterLink>
 
-          <span class="text-lg px-2 cursor-pointer hover:text-primary-400">
-            펜션
-          </span>
+          <RouterLink :to="{ name: 'pension' }">
+            <span class="text-lg px-2 cursor-pointer hover:text-primary-400">
+              펜션
+            </span>
+          </RouterLink>
         </div>
 
         <div class="flex items-center lg:order-2">

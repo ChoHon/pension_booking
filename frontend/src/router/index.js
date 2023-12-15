@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/stores/auth';
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 
@@ -30,9 +31,22 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if (to.meta?.requiresAuth) {
-    
+    const authStore = useAuthStore();
+    if (authStore.access && authStore.refresh) {
+      const isAuthenticated = await authStore.checkToken();
+      console.log(isAuthenticated);
+      if (isAuthenticated) {
+        next();
+      } else {
+        next({ name: 'login' });
+      }
+    } else {
+      next({ name: 'login' });
+    }
+  } else {
+    next();
   }
 });
 
