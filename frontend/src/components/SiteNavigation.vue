@@ -135,8 +135,8 @@ import {
   MenuItems,
 } from '@headlessui/vue';
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
-import { ref } from 'vue';
 import http from '@/services/http';
+import router from '@/router';
 
 const authStore = useAuthStore();
 
@@ -144,4 +144,23 @@ const navigation = [
   { name: '홈', router: 'home', current: false },
   { name: '펜션', router: 'pension', current: false },
 ];
+
+const logout = async () => {
+  const token_state = await authStore.checkToken();
+
+  if (token_state) {
+    const response = await http.post(
+      '/accounts/logout/',
+      { refresh: authStore.refresh },
+      {
+        headers: { Authorization: `Bearer ${authStore.access}` },
+      }
+    );
+
+    authStore.removeTokens();
+  }
+
+  authStore.login_status = false;
+  router.push({ name: 'home' });
+};
 </script>

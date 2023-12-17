@@ -33,7 +33,6 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const authStore = useAuthStore();
-  authStore.getTokens();
 
   const isAuthenticated =
     authStore.access && authStore.refresh

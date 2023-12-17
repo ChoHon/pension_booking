@@ -7,14 +7,21 @@ export const useAuthStore = defineStore('auth', () => {
   const refresh = ref(localStorage.getItem('refresh'));
   const login_status = ref(false);
 
-  const getTokens = () => {
-    access.value = localStorage.getItem('access');
-    refresh.value = localStorage.getItem('refresh');
+  const setAccessToken = new_access => {
+    localStorage.setItem('access', new_access);
+    access.value = new_access;
   };
 
-  const setTokens = (access, refresh) => {
-    localStorage.setItem('access', access);
-    localStorage.setItem('refresh', refresh);
+  const setRefreshToken = new_refresh => {
+    localStorage.setItem('refresh', new_refresh);
+    refresh.value = new_refresh;
+  };
+
+  const removeTokens = () => {
+    localStorage.removeItem('access');
+    localStorage.removeItem('refresh');
+    access.value = null;
+    refresh.value = null;
   };
 
   const checkToken = async () => {
@@ -33,7 +40,7 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await http.post('/accounts/refresh/', {
         refresh: refresh.value,
       });
-      localStorage.setItem('access', response.data.access);
+      setAccessToken(response.data.access);
       return true;
     } catch (error) {
       return false;
@@ -44,8 +51,9 @@ export const useAuthStore = defineStore('auth', () => {
     access,
     refresh,
     login_status,
-    getTokens,
-    setTokens,
+    setAccessToken,
+    setRefreshToken,
+    removeTokens,
     checkToken,
   };
 });
