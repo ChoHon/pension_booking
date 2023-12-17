@@ -96,7 +96,6 @@ const login = async () => {
     const response = await http.post('/accounts/login/', user);
     const { access, refresh } = response.data;
     authStore.setTokens(access, refresh);
-
     router.push({ name: 'home' });
     return response;
   } catch (error) {

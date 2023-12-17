@@ -31,22 +31,25 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from) => {
+  const authStore = useAuthStore();
+  authStore.getTokens();
+
+  const isAuthenticated =
+    authStore.access && authStore.refresh
+      ? await authStore.checkToken()
+      : false;
+
+  authStore.login_status = isAuthenticated;
+
   if (to.meta?.requiresAuth) {
-    const authStore = useAuthStore();
-    if (authStore.access && authStore.refresh) {
-      const isAuthenticated = await authStore.checkToken();
-      console.log(isAuthenticated);
-      if (isAuthenticated) {
-        next();
-      } else {
-        next({ name: 'login' });
-      }
+    if (isAuthenticated) {
+      return true;
     } else {
-      next({ name: 'login' });
+      return { name: 'login' };
     }
   } else {
-    next();
+    return true;
   }
 });
 

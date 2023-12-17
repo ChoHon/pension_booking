@@ -1,123 +1,147 @@
 <template>
-  <header>
-    <nav class="border-gray-200 px-4 lg:px-6 py-2.5 bg-gray-800 shadow-lg">
-      <div
-        class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl text-white"
-      >
-        <!-- 로고 -->
-        <RouterLink :to="{ name: 'home' }">
-          <div class="flex items-center">
-            <i class="fa-solid fa-hotel px-2 text-xl"></i>
-            <span class="self-center text-xl font-semibold whitespace-nowrap">
-              펜션 관리
-            </span>
+  <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div class="relative flex h-16 items-center justify-between">
+        <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+          <!-- 모바일 메뉴 버튼 -->
+          <DisclosureButton
+            class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+          >
+            <span class="absolute -inset-0.5" />
+            <span class="sr-only">Open main menu</span>
+            <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
+            <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
+          </DisclosureButton>
+        </div>
+        <div
+          class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start"
+        >
+          <!-- 로고 -->
+          <div class="flex flex-shrink-0 items-center">
+            <i class="fa-solid fa-hotel text-white text-2xl"></i>
           </div>
-        </RouterLink>
 
-        <div>
-          <RouterLink :to="{ name: 'home' }">
-            <span class="text-lg px-2 cursor-pointer hover:text-primary-400">
-              홈
-            </span>
-          </RouterLink>
-
-          <RouterLink :to="{ name: 'pension' }">
-            <span class="text-lg px-2 cursor-pointer hover:text-primary-400">
-              펜션
-            </span>
-          </RouterLink>
+          <!-- 메인 메뉴 -->
+          <div class="hidden sm:ml-6 sm:block">
+            <div class="flex space-x-4">
+              <div
+                v-for="item in navigation"
+                :key="item.name"
+                :class="[
+                  item.current
+                    ? 'bg-gray-900 text-white'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                  'rounded-md px-3 py-2 text-md font-medium cursor-pointer',
+                ]"
+                :aria-current="item.current ? 'page' : undefined"
+              >
+                <RouterLink :to="{ name: item.router }">{{
+                  item.name
+                }}</RouterLink>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="flex items-center lg:order-2">
-          <!-- 로그인 -->
-          <RouterLink :to="{ name: 'login' }">
-            <div
-              class="text-white focus:ring-4 font-medium rounded-lg text-md px-4 lg:px-5 py-2 lg:py-2.5 mr-2 hover:bg-gray-700 focus:outline-none focus:ring-gray-800 cursor-pointer"
-            >
-              로그인
-            </div>
-          </RouterLink>
-
-          <!-- 회원가입 -->
-          <RouterLink :to="{ name: 'signup' }">
-            <div
-              class="text-white focus:ring-4 font-medium rounded-lg text-md px-4 lg:px-5 py-2 lg:py-2.5 mr-2 bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-primary-800"
+        <div
+          class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
+        >
+          <!-- 로그인 버튼 -->
+          <RouterLink v-if="!authStore.login_status" :to="{ name: 'login' }">
+            <button
+              type="button"
+              class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-300"
             >
               시작하기
-            </div>
+            </button>
           </RouterLink>
 
-          <!-- 모바일 메뉴 버튼 -->
-          <!-- <button
-            data-collapse-toggle="mobile-menu-2"
-            type="button"
-            class="inline-flex items-center p-2 ml-1 text-sm rounded-lg lg:hidden focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
-            aria-controls="mobile-menu-2"
-            aria-expanded="false"
-          >
-            <span class="sr-only">모바일 메뉴</span>
-            <i class="fa-solid fa-bars text-xl w-6 h-6"></i>
-          </button> -->
-        </div>
+          <!-- 유저 메뉴 -->
+          <Menu v-if="authStore.login_status" as="div" class="relative ml-3">
+            <div>
+              <MenuButton
+                class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+              >
+                <span class="absolute -inset-1.5" />
+                <span class="sr-only">Open user menu</span>
+                <img
+                  class="h-8 w-8 rounded-full bg-white"
+                  src="/user.png"
+                  alt=""
+                />
+              </MenuButton>
+            </div>
 
-        <!-- 모바일 메뉴 -->
-        <!-- <div
-          class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
-          id="mobile-menu-2"
-        >
-          <ul
-            class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0"
-          >
-            <li>
-              <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white"
-                aria-current="page"
-                >Home</a
+            <transition
+              enter-active-class="transition ease-out duration-100"
+              enter-from-class="transform opacity-0 scale-95"
+              enter-to-class="transform opacity-100 scale-100"
+              leave-active-class="transition ease-in duration-75"
+              leave-from-class="transform opacity-100 scale-100"
+              leave-to-class="transform opacity-0 scale-95"
+            >
+              <MenuItems
+                class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
               >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                >Company</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                >Marketplace</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                >Features</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                >Team</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                >Contact</a
-              >
-            </li>
-          </ul>
-        </div> -->
+                <MenuItem v-slot="{ active }">
+                  <div
+                    :class="[
+                      active ? 'bg-gray-100' : '',
+                      'block px-4 py-2 text-sm text-gray-700',
+                    ]"
+                    @click="logout"
+                  >
+                    로그아웃
+                  </div>
+                </MenuItem>
+              </MenuItems>
+            </transition>
+          </Menu>
+        </div>
       </div>
-    </nav>
-  </header>
+    </div>
+
+    <!-- 모바일 메뉴 -->
+    <DisclosurePanel class="sm:hidden">
+      <div class="space-y-1 px-2 pb-3 pt-2">
+        <DisclosureButton
+          v-for="item in navigation"
+          :key="item.name"
+          as="a"
+          :class="[
+            item.current
+              ? 'bg-gray-900 text-white'
+              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+            'block rounded-md px-3 py-2 text-md font-medium cursor-pointer',
+          ]"
+          :aria-current="item.current ? 'page' : undefined"
+        >
+          <RouterLink :to="{ name: item.router }">{{ item.name }}</RouterLink>
+        </DisclosureButton>
+      </div>
+    </DisclosurePanel>
+  </Disclosure>
 </template>
 
 <script setup>
-import { RouterLink } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from '@headlessui/vue';
+import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
+import { ref } from 'vue';
+import http from '@/services/http';
+
+const authStore = useAuthStore();
+
+const navigation = [
+  { name: '홈', router: 'home', current: false },
+  { name: '펜션', router: 'pension', current: false },
+];
 </script>

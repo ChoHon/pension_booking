@@ -5,6 +5,12 @@ import http from '@/services/http';
 export const useAuthStore = defineStore('auth', () => {
   const access = ref(localStorage.getItem('access'));
   const refresh = ref(localStorage.getItem('refresh'));
+  const login_status = ref(false);
+
+  const getTokens = () => {
+    access.value = localStorage.getItem('access');
+    refresh.value = localStorage.getItem('refresh');
+  };
 
   const setTokens = (access, refresh) => {
     localStorage.setItem('access', access);
@@ -34,5 +40,12 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-  return { access, refresh, setTokens, checkToken };
+  return {
+    access,
+    refresh,
+    login_status,
+    getTokens,
+    setTokens,
+    checkToken,
+  };
 });
