@@ -31,5 +31,5 @@ export default {
       md: '768px',
     },
   },
-  plugins: [require('tailwind-scrollbar-hide')],
+  plugins: [require('@tailwindcss/forms')],
 };

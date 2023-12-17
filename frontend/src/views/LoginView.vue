@@ -1,88 +1,103 @@
 <template>
-  <section class="bg-gray-50">
-    <div
-      class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
-    >
-      <div
-        class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0"
+  <div
+    class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8"
+  >
+    <!-- 타이틀 -->
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+      <h2
+        class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
       >
-        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <!-- 헤더 -->
-          <h1
-            class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl"
+        로그인
+      </h2>
+    </div>
+
+    <!-- 폼 -->
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <form class="space-y-6">
+        <!-- 이메일 -->
+        <div>
+          <label
+            for="email"
+            class="block text-md font-medium leading-6 text-gray-900"
+          >
+            이메일
+          </label>
+          <div class="mt-2">
+            <input
+              v-model="user.email"
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+
+        <!-- 비밀번호 -->
+        <div>
+          <div class="flex items-center justify-between">
+            <label
+              for="password"
+              class="block text-md font-medium leading-6 text-gray-900"
+            >
+              비밀번호
+            </label>
+            <!-- <div class="text-sm">
+              <a
+                href="#"
+                class="font-semibold text-indigo-600 hover:text-indigo-500"
+              >
+                Forgot password?
+              </a>
+            </div> -->
+          </div>
+          <div class="mt-2">
+            <input
+              v-model="user.password"
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+
+        <!-- 로그인 버튼 -->
+        <div>
+          <button
+            type="button"
+            class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            @click="login"
           >
             로그인
-          </h1>
-
-          <form class="space-y-4 md:space-y-6" action="#">
-            <!-- 이메일 -->
-            <div>
-              <label
-                for="email"
-                class="block mb-2 text-md font-medium text-gray-900"
-                >이메일</label
-              >
-              <input
-                v-model="user.email"
-                type="email"
-                name="email"
-                id="email"
-                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                placeholder="name@company.com"
-                required
-              />
-            </div>
-
-            <!-- 비밀번호 -->
-            <div>
-              <label
-                for="password"
-                class="block mb-2 text-md font-medium text-gray-900"
-                >비밀번호</label
-              >
-              <input
-                v-model="user.password"
-                type="password"
-                name="password"
-                id="password"
-                placeholder="••••••••"
-                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                required
-              />
-            </div>
-
-            <!-- 로그인 버튼 -->
-            <button
-              type="submit"
-              class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-md px-5 py-2.5 text-center"
-              @click.prevent="login"
-            >
-              로그인
-            </button>
-
-            <!-- 회원가입 -->
-            <p class="text-sm font-light text-gray-500">
-              아직 회원이 아니신가요?
-              <RouterLink :to="{ name: 'signup' }">
-                <span
-                  class="font-medium text-primary-600 hover:underline cursor-pointer"
-                >
-                  회원가입
-                </span>
-              </RouterLink>
-            </p>
-          </form>
+          </button>
         </div>
-      </div>
+      </form>
+
+      <p class="mt-10 text-center text-md text-gray-500">
+        아직 회원이 아니신가요?
+        <RouterLink :to="{ name: 'signup' }">
+          <span
+            class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+          >
+            회원가입
+          </span>
+        </RouterLink>
+      </p>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
-import http from '@/services/http';
-import { reactive, resolveDirective } from 'vue';
-import { useAuthStore } from '@/stores/auth';
+import { reactive } from 'vue';
+import { RouterLink } from 'vue-router';
 import router from '@/router';
+import http from '@/services/http';
+import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
 
@@ -106,5 +121,3 @@ const login = async () => {
   }
 };
 </script>
-
-<style scoped></style>
