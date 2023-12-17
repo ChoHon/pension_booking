@@ -143,6 +143,7 @@ const authStore = useAuthStore();
 const navigation = [
   { name: '홈', router: 'home', current: false },
   { name: '펜션', router: 'pension', current: false },
+  { name: '예약', router: 'reservation', current: false },
 ];
 
 const logout = async () => {
