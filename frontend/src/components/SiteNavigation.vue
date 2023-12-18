@@ -34,10 +34,9 @@
                   'rounded-md px-3 py-2 text-md font-medium cursor-pointer',
                 ]"
                 :aria-current="item.current ? 'page' : undefined"
+                @click="routeTo(item.route)"
               >
-                <RouterLink :to="{ name: item.router }">{{
-                  item.name
-                }}</RouterLink>
+                {{ item.name }}
               </div>
             </div>
           </div>
@@ -115,8 +114,9 @@
             'block rounded-md px-3 py-2 text-md font-medium cursor-pointer',
           ]"
           :aria-current="item.current ? 'page' : undefined"
+          @click="routeTo(item.route)"
         >
-          <RouterLink :to="{ name: item.router }">{{ item.name }}</RouterLink>
+          {{ item.name }}
         </DisclosureButton>
       </div>
     </DisclosurePanel>
@@ -137,14 +137,19 @@ import {
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import http from '@/services/http';
 import router from '@/router';
+import { reactive } from 'vue';
 
 const authStore = useAuthStore();
 
-const navigation = [
-  { name: '홈', router: 'home', current: false },
-  { name: '펜션', router: 'pension', current: false },
-  { name: '예약', router: 'reservation', current: false },
-];
+const navigation = reactive([
+  { name: '홈', route: 'home', current: false },
+  { name: '펜션', route: 'pension', current: false },
+  { name: '예약', route: 'reservation', current: false },
+]);
+
+const routeTo = page_name => {
+  router.push({ name: page_name });
+};
 
 const logout = async () => {
   const token_state = await authStore.checkToken();
