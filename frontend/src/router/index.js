@@ -13,17 +13,17 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue'),
+      component: () => import('../views/accounts/LoginView.vue'),
     },
     {
       path: '/signup',
       name: 'signup',
-      component: () => import('../views/SignupView.vue'),
+      component: () => import('../views/accounts/SignupView.vue'),
     },
     {
       path: '/pension',
       name: 'pension',
-      component: () => import('../views/PensionView.vue'),
+      component: () => import('../views/pensions/PensionView.vue'),
       meta: {
         requiresAuth: true,
       },
