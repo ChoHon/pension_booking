@@ -8,7 +8,6 @@ class Pension(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     address = models.CharField(max_length=100, blank=True)
-    phone_number = models.CharField(max_length=11, blank=True)
 
     class Meta:
         db_table = 'pension'
