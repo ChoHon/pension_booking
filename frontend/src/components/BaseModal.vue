@@ -1,6 +1,6 @@
 <template>
-  <TransitionRoot as="template" :show="modalStore.isOpen">
-    <Dialog as="div" class="relative z-10" @close="modalStore.closeModal">
+  <TransitionRoot as="template" :show="is_open">
+    <Dialog as="div" class="relative z-10" @close="$emit('close')">
       <TransitionChild
         as="template"
         enter="ease-out duration-300"
@@ -46,14 +46,6 @@
               </div>
               <div class="mt-10 grid grid-flow-row-dense grid-cols-2 gap-3">
                 <slot name="buttons" />
-                <button
-                  type="button"
-                  class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-                  @click="modalStore.closeModal"
-                  ref="cancelButtonRef"
-                >
-                  취소
-                </button>
               </div>
             </DialogPanel>
           </TransitionChild>
@@ -71,8 +63,15 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue';
-import { CheckIcon } from '@heroicons/vue/24/outline';
 import { useModalStore } from '@/stores/modal';
+
+defineEmits(['close']);
+defineProps({
+  is_open: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 const modalStore = useModalStore();
 </script>

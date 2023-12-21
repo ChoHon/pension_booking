@@ -2,15 +2,11 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useModalStore = defineStore('modal', () => {
-  const isOpen = ref(false);
+  const target_pension = ref([]);
 
-  const openModal = () => {
-    isOpen.value = true;
+  const setTargetPension = input => {
+    target_pension.value = input;
   };
 
-  const closeModal = () => {
-    isOpen.value = false;
-  };
-
-  return { isOpen, openModal, closeModal };
+  return { target_pension, setTargetPension };
 });
