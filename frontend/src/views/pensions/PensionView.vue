@@ -133,7 +133,7 @@
                           active ? 'bg-gray-50' : '',
                           'block px-3 py-1 text-sm leading-6 text-gray-900 cursor-pointer',
                         ]"
-                        @click=""
+                        @click="removeRoom(room.id)"
                       >
                         삭제
                       </div>
@@ -676,6 +676,23 @@ const modifyRoom = async () => {
       }
     );
     alert('방이 수정되었습니다.');
+  } catch (error) {
+    console.log(error.response.data);
+  }
+
+  router.go(0);
+  return null;
+};
+
+// 방 삭제
+const removeRoom = async (room_id: number) => {
+  try {
+    const response = await http.delete(`/rooms/${room_id}/`, {
+      headers: {
+        Authorization: `Bearer ${authStore.access}`,
+      },
+    });
+    alert('방이 삭제되었습니다.');
   } catch (error) {
     console.log(error.response.data);
   }
