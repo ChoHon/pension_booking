@@ -63,7 +63,6 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue';
-import { useModalStore } from '@/stores/modal';
 
 defineEmits(['close']);
 defineProps({
@@ -72,8 +71,6 @@ defineProps({
     default: false,
   },
 });
-
-const modalStore = useModalStore();
 </script>
 
 <style scoped></style>

@@ -58,6 +58,7 @@
                       active ? 'bg-gray-50' : '',
                       'block px-3 py-1 text-sm leading-6 text-gray-900 cursor-pointer',
                     ]"
+                    @click="openRoomAddModal(pension)"
                   >
                     방 추가
                   </div>
@@ -254,6 +255,115 @@
       </button>
     </template>
   </BaseModal>
+
+  <BaseModal
+    :is_open="is_room_add_modal_open"
+    @close="is_room_add_modal_open = false"
+  >
+    <template #header>방 추가</template>
+    <template #body>
+      <form class="space-y-6">
+        <div>
+          <label
+            for="name"
+            class="block text-sm font-medium leading-6 text-gray-900"
+          >
+            이름
+          </label>
+          <div class="mt-2">
+            <input
+              v-model="new_room.name"
+              id="name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              required
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between">
+            <label
+              for="capacity"
+              class="block text-sm font-medium leading-6 text-gray-900"
+            >
+              수용 인원
+            </label>
+          </div>
+          <div class="mt-2">
+            <input
+              v-model="new_room.capacity"
+              id="capacity"
+              name="capacity"
+              type="number"
+              required
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between">
+            <label
+              for="price_peak_season"
+              class="block text-sm font-medium leading-6 text-gray-900"
+            >
+              성수기 가격
+            </label>
+          </div>
+          <div class="mt-2">
+            <input
+              v-model="new_room.price_peak_season"
+              id="price_peak_season"
+              name="price_peak_season"
+              type="number"
+              required
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between">
+            <label
+              for="price_off_season"
+              class="block text-sm font-medium leading-6 text-gray-900"
+            >
+              비수기 가격
+            </label>
+          </div>
+          <div class="mt-2">
+            <input
+              v-model="new_room.price_off_season"
+              id="price_off_season"
+              name="price_off_season"
+              type="number"
+              required
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+      </form>
+    </template>
+    <template #buttons>
+      <button
+        type="button"
+        class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+        @click="addRoom"
+      >
+        추가
+      </button>
+      <button
+        type="button"
+        class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+        @click="is_room_add_modal_open = false"
+      >
+        취소
+      </button>
+    </template>
+  </BaseModal>
 </template>
 
 <script setup lang="ts">
@@ -271,9 +381,15 @@ const modalStore = useModalStore();
 
 const is_pension_add_modal_open = ref(false);
 const is_pension_mod_modal_open = ref(false);
+const is_room_add_modal_open = ref(false);
 
 const openPensionModModal = pension => {
   is_pension_mod_modal_open.value = true;
+  modalStore.setTargetPension(pension);
+};
+
+const openRoomAddModal = pension => {
+  is_room_add_modal_open.value = true;
   modalStore.setTargetPension(pension);
 };
 
@@ -348,6 +464,37 @@ const removePension = async (pension_id: number) => {
       },
     });
     alert('펜션이 삭제되었습니다.');
+  } catch (error) {
+    console.log(error.response.data);
+  }
+
+  router.go(0);
+  return null;
+};
+
+// 방 추가
+const new_room = reactive({
+  name: '',
+  capacity: 0,
+  price_peak_season: 0,
+  price_off_season: 0,
+});
+const addRoom = async () => {
+  try {
+    const response = await http.post(
+      '/rooms/',
+      {
+        pension: modalStore.target_pension.id,
+        ...new_room,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authStore.access}`,
+        },
+      }
+    );
+    alert('방이 추가되었습니다.');
+    console.log(response.data);
   } catch (error) {
     console.log(error.response.data);
   }
