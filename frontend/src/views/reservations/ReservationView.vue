@@ -81,6 +81,7 @@
               (day.isSelected || day.isToday) && 'font-semibold',
               'mx-auto flex h-8 w-8 items-center justify-center rounded-full',
             ]"
+            @click="selectDate(day.date)"
           >
             <time :datetime="day.date">{{
               day.date.split('-').pop().replace(/^0/, '')
@@ -94,7 +95,8 @@
     <section class="mt-0 pl-14">
       <!-- 선택된 날짜 -->
       <h2 class="text-lg font-semibold leading-6 text-gray-900">
-        0000년 0월 0일
+        {{ selected_date.getFullYear() }}년 {{ selected_date.getMonth() + 1 }}월
+        {{ selected_date.getDate() }}일
       </h2>
 
       <!-- 예약 목록 -->
@@ -175,14 +177,14 @@ import { ref } from 'vue';
 let days = ref([]);
 let current_month = ref(0);
 let current_year = ref(0);
-let selected_date = ref(0);
+let selected_date = ref(null);
 
 const offset = new Date().getTimezoneOffset() * 60000;
 
 const today = new Date(Date.now());
 current_year.value = today.getFullYear();
 current_month.value = today.getMonth();
-selected_date.value = today.getDate();
+selected_date.value = new Date(Date.now());
 
 let start_day_of_calendar = new Date(Date.now());
 start_day_of_calendar.setDate(
@@ -208,11 +210,16 @@ const calculateCalendar = (start_day_of_calendar: Date) => {
       current_year.value === date.getFullYear() &&
       current_month.value === date.getMonth();
 
+    let is_selected =
+      selected_date.value.getFullYear() === date.getFullYear() &&
+      selected_date.value.getMonth() === date.getMonth() &&
+      selected_date.value.getDate() === date.getDate();
+
     days.push({
       date: date.toISOString().split('T')[0],
       isToday: cal_today,
       isCurrentMonth: cal_current_month,
-      isSelected: cal_today,
+      isSelected: is_selected,
     });
   }
 
@@ -247,6 +254,11 @@ const moveNextMonth = () => {
   start_day_of_calendar.setDate(
     start_day_of_calendar.getDate() - start_day_of_calendar.getDay()
   );
+  days.value = calculateCalendar(start_day_of_calendar);
+};
+
+const selectDate = (date: Date) => {
+  selected_date.value = new Date(date);
   days.value = calculateCalendar(start_day_of_calendar);
 };
 
